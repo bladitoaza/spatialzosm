@@ -1,1 +1,1 @@
-from spytialzosm import *
+from .spytialzosm import *
