@@ -1,1 +1,0 @@
-from .spytialzosm import *

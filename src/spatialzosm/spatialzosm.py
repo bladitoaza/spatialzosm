@@ -51,7 +51,7 @@ class Osmpoi:
 				}
 		print('Obtaining POIs from OSM for {}. It can take a few minutes...'.format(self.place_name))
 		#Set timeout
-		ox.settings.timeout=2500
+		ox.settings.requests_timeout=2500
 		try:
 			# Get POIs from place
 			buildings = ox.features_from_place(self.place_name, tags)
@@ -247,7 +247,7 @@ class Osmpoi:
 		tags = {'building': True}
 		print('Obtaining buildings from OSM for {}. It can take a few minutes...'.format(self.place_name))
 		# Set timeout
-		ox.settings.timeout = 2500
+		ox.settings.requests_timeout = 2500
 		try:
 			# Get POIs from place
 			buildings = ox.features_from_place(self.place_name, tags)
@@ -420,30 +420,30 @@ class Osmpoi:
 		df.to_csv('sampled_houses_'+'buildings'+'.csv',index=False)
 		print("Sampling completed. Coordinates saved to disk.")
 
-	def create_houses_areas(self,AZ, crs='EPSG:4326', method='uniform',size=10):
+	def create_houses_areas(self,zus, crs='EPSG:4326', method='uniform',pop_size=10):
 			"""
-			Creates houses areas by sampling points on a given AZ (Analysis Zone) dataset.
+			Creates houses areas by sampling points on a given ZU (zone unit) dataset.
 
 			Parameters:
-			- AZ (str or GeoDataFrame): The AZ dataset to sample points from. It can be either a file path to a shapefile or a GeoDataFrame object.
-			- crs (str, optional): The coordinate reference system of the AZ dataset. Defaults to 'EPSG:4326'.
+			- zus (str or GeoDataFrame): The ZUs dataset to sample points from. It can be either a file path to a shapefile or a GeoDataFrame object.
+			- crs (str, optional): The coordinate reference system of the ZUs dataset. Defaults to 'EPSG:4326'.
 			- method (str, optional): The method used for sampling points. Defaults to 'uniform'.
-			- size (int, optional): The number of points to sample. Defaults to 10.
+			- pop_size (int, optional): The number of points to sample. Defaults to 10.
 
 			Returns:
-			None
+			A CSV file containing the coordinates of the generated houses saved to disk.
 
 			"""
 			
-			if isinstance(AZ, str):
-				gdf = gpd.read_file(AZ)
-			elif isinstance(AZ, gpd.GeoDataFrame): #reading a Geopandas obejct
-				gdf=AZ
+			if isinstance(zus, str):
+				gdf = gpd.read_file(zus)
+			elif isinstance(zus, gpd.GeoDataFrame): #reading a Geopandas obejct
+				gdf=zus
 			else:  #reading MultiDigraph directly
-				gdf = ox.utils_graph.graph_to_gdfs(AZ,nodes=False,edges=True,node_geometry=True)	
+				gdf = ox.utils_graph.graph_to_gdfs(zus,nodes=False,edges=True,node_geometry=True)	
 			#Sampling points on TAZ with distribution 
 			print('Sampling points on areas...')		
-			sampled_houses = self.__spatial_distribution(gdf,size=size,method=method,crs=crs)		
+			sampled_houses = self.__spatial_distribution(gdf,size=pop_size,method=method,crs=crs)		
 			sampled_houses=  sampled_houses.explode(ignore_index=True)
 			list_of_tuples = list(zip(sampled_houses.geometry.x, sampled_houses.geometry.y))
 			df = pd.DataFrame(list_of_tuples, columns =['x','y'])		
