@@ -1,0 +1,32 @@
+name: spatialzOSM-examples
+channels:
+  - conda-forge
+  - default
+
+dependencies:
+  # OSMnx required/optional dependencies
+  - gdal
+  - geopandas
+  - matplotlib
+  - networkx
+  - numpy
+  - pandas
+  - rasterio
+  - requests
+  - scipy
+  - scikit-learn
+  - shapely
+
+  # other packages needed for CI or running examples
+  - jupyterlab
+  - pillow
+  - pre-commit
+  - python=3.11.*
+  - python-igraph
+
+  # install OSMnx beta via pip
+  - pip
+  - git
+  - pip:
+      - osmnx==2.0.0b0
+      - git+https://github.com/bladitoaza/spatialzosm.git
