@@ -1,6 +1,8 @@
 # SpatialzOSM
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Examples](https://img.shields.io/badge/SpatialzOSM-Examples-purple.svg)](https://github.com/bladitoaza/spatialzOSM-examples)
+![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)
 
 **SpatialzOSM** is a Python package to generate disaggregated home locations and points of interests in coordinates for agent- and activity-based models using OSMnx. You can download features (e.g., points of interests, street networks, and buildings) from OpenStreetMaps using OSMnx, and sample home locations over the street networks or within buildings. 
 
