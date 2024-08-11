@@ -1,1 +1,1 @@
-from .spatialzosm import *
+from . import spatialize
