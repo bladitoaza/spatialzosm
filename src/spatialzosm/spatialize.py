@@ -481,7 +481,7 @@ class Osmpoi:
 
 			"""
 			
-			from utils._randist import normal 
+			from spatialzosm.utils._randist import normal 
 			if type(size) is not int:
 				if isinstance(size, np.ndarray):
 					size[np.isnan(size)] = 0
