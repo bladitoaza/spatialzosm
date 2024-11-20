@@ -386,8 +386,8 @@ class Osmpoi:
 			gdf=buildings
 		else:  #reading MultiDigraph directly
 			gdf = ox.utils_graph.graph_to_gdfs(buildings,nodes=False,edges=True,node_geometry=True)
-		if index_col is None:
-			index_col= pop_size.index.name
+		if index_column is None:
+			index_column= pop_size.index.name
 		if building_column is None:
 			building_column='building'
 		gdf.reset_index(inplace=True)
