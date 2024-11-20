@@ -278,7 +278,7 @@ class Osmpoi:
 		
 		return buildings
 
-	def create_houses_streets(self,streets,pop_size=10, crs='EPSG:4326',index_col=None):	
+	def create_houses_streets(self,streets,pop_size=10, index_col=None,road_column=None, crs='EPSG:4326'):	
 		"""
 		Create coordinates of houses based on street network data.
 
@@ -304,6 +304,8 @@ class Osmpoi:
 		
 		if index_col is None:
 			index_col= pop_size.index.name
+		if road_column is None:
+			road_column='highway'
 		#Cleaning of type of street clumn	
 		gdf.reset_index(inplace=True)
 		
@@ -356,7 +358,7 @@ class Osmpoi:
 		df.to_csv('sampled_houses_'+'streets'+'.csv',index=False)
 		print("Sampling completed. Coordinates saved to disk.")
 
-	def create_houses_buildings(self,buildings,index_column,building_column=None, pop_size=10,crs='EPSG:4326'):
+	def create_houses_buildings(self,buildings,pop_size=10,index_column=None,building_column=None, crs='EPSG:4326'):
 		"""
 			Creates coordinates of houses based on building data.
 
@@ -384,7 +386,10 @@ class Osmpoi:
 			gdf=buildings
 		else:  #reading MultiDigraph directly
 			gdf = ox.utils_graph.graph_to_gdfs(buildings,nodes=False,edges=True,node_geometry=True)
-		
+		if index_col is None:
+			index_col= pop_size.index.name
+		if building_column is None:
+			building_column='building'
 		gdf.reset_index(inplace=True)
 		gdf[building_column]=gdf[building_column].astype('category')
 		building_type = gdf[building_column].unique()
@@ -420,7 +425,7 @@ class Osmpoi:
 		df.to_csv('sampled_houses_'+'buildings'+'.csv',index=False)
 		print("Sampling completed. Coordinates saved to disk.")
 
-	def create_houses_areas(self,zus, crs='EPSG:4326', method='uniform',pop_size=10):
+	def create_houses_areas(self,zus, method='uniform',pop_size=10, crs='EPSG:4326'):
 			"""
 			Creates houses areas by sampling points on a given ZU (zone unit) dataset.
 
