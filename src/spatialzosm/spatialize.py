@@ -209,7 +209,7 @@ class Osmpoi:
 			print("An error occurred while obtaining POIs: ", e)
 			return
 
-		street_gdf = ox.utils_graph.graph_to_gdfs(streets, nodes=False, edges=True, node_geometry=False)
+		street_gdf = ox.convert.graph_to_gdfs(streets, nodes=False, edges=True, node_geometry=False)
 		# Eliminate unnecessary columns
 		street_gdf.drop(street_gdf.iloc[:, list(range(4, 6)) + list(range(10, street_gdf.columns.size))], inplace=True, axis=1)
 		# Save file
@@ -300,7 +300,7 @@ class Osmpoi:
 		elif isinstance(streets, gpd.GeoDataFrame): #reading a Geopandas obejct
 			gdf=streets
 		else:  #reading MultiDigraph directly
-			gdf = ox.utils_graph.graph_to_gdfs(streets,nodes=False,edges=True,node_geometry=True)		
+			gdf = ox.convert.graph_to_gdfs(streets,nodes=False,edges=True,node_geometry=True)		
 		
 		if index_col is None:
 			index_col= pop_size.index.name
@@ -385,7 +385,7 @@ class Osmpoi:
 		elif isinstance(buildings, gpd.GeoDataFrame): #reading a Geopandas object
 			gdf=buildings
 		else:  #reading MultiDigraph directly
-			gdf = ox.utils_graph.graph_to_gdfs(buildings,nodes=False,edges=True,node_geometry=True)
+			gdf = ox.convert.graph_to_gdfs(buildings,nodes=False,edges=True,node_geometry=True)
 		if index_column is None:			
 			index_column= pop_size.index.name
 		if building_column is None:
@@ -445,7 +445,7 @@ class Osmpoi:
 			elif isinstance(zus, gpd.GeoDataFrame): #reading a Geopandas obejct
 				gdf=zus
 			else:  #reading MultiDigraph directly
-				gdf = ox.utils_graph.graph_to_gdfs(zus,nodes=False,edges=True,node_geometry=True)	
+				gdf = ox.convert.graph_to_gdfs(zus,nodes=False,edges=True,node_geometry=True)	
 			#Sampling points on TAZ with distribution 
 			print('Sampling points on areas...')		
 			sampled_houses = self.__spatial_distribution(gdf,size=pop_size,method=method,crs=crs)		
