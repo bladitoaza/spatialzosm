@@ -408,8 +408,8 @@ class Osmpoi:
 		street_TAZ['pop_size']= street_TAZ['pop_size'].astype(int)
 		print('Calculating number of points per building...')
 		result_df = street_TAZ.apply(
-			lambda row: generator.multinomial(row['pop_size'],[1/row['n_buildings']]*row['n_buildings'].astype(int)) if (row['n_buildings'] > 0) else np.nan, axis=1
-			)
+			lambda row: (generator.multinomial(row['pop_size'], [1/int(row['n_buildings'])] * int(row['n_buildings'])) if int(row['n_buildings']) > 0 else np.nan), axis=1
+		)
 		result_df.dropna(inplace=True)
 		df_points_buildings = []
 
