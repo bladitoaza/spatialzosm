@@ -204,7 +204,7 @@ class Osmpoi:
 		print('Obtaining street network from OSM for {}. It can take a few minutes...'.format(self.place_name))
 		try:
 			# Get streets from place
-			streets = ox.graph_from_place(self.place_name, network_type='all_private', simplify=True, retain_all=False)
+			streets = ox.graph_from_place(self.place_name, network_type='all', simplify=True, retain_all=False)
 		except Exception as e:
 			print("An error occurred while obtaining POIs: ", e)
 			return
@@ -382,11 +382,11 @@ class Osmpoi:
 
 		if type(buildings) == str: #reading csv file from disk	
 			gdf = gpd.read_file(buildings)
-		elif isinstance(buildings, gpd.GeoDataFrame): #reading a Geopandas obejct
+		elif isinstance(buildings, gpd.GeoDataFrame): #reading a Geopandas object
 			gdf=buildings
 		else:  #reading MultiDigraph directly
 			gdf = ox.utils_graph.graph_to_gdfs(buildings,nodes=False,edges=True,node_geometry=True)
-		if index_column is None:
+		if index_column is None:			
 			index_column= pop_size.index.name
 		if building_column is None:
 			building_column='building'
