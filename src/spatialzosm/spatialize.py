@@ -177,11 +177,11 @@ class Osmpoi:
 			df.loc[(df['amenity'].isnull()) & (~df['sport'].isnull()),'amenity']=df['sport']
 		#TOURISM
 		if 'building' in df.columns:
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'group']='tourism'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'amenity']=df['building']
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'group']='tourism'
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'amenity']=df['building']
 		if 'tourism' in df.columns:
-		df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()),'amenity']=df['tourism']
-		df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()), 'group']='tourism'
+			df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()),'amenity']=df['tourism']
+			df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()), 'group']='tourism'
 		#WASTE MANAGEMENT amenities from OSM tagging system DROP
 		df.loc[df['amenity'].isin(['sanitary_dump_station', 'recycling', 'waste_basket', 'waste_disposal', 'waste_transfer_station']), 'group']='waste_management'		
 		#BUILDING- ACCOMODATION
