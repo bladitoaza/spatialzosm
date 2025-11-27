@@ -94,87 +94,119 @@ class Osmpoi:
 		print('Filtering, cleaning and rearranging POIs for {}.\n It can take a few minutes...'.format(self.place_name))
 
 		#AERODROME from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (~df['aeroway'].isnull()),'amenity']=df['aeroway']
+		if 'aeroway' in df.columns:
+    		df.loc[(df['amenity'].isnull()) & (~df['aeroway'].isnull()), 'amenity'] = df['aeroway']
 		df.loc[df['amenity'].isin(['aerodrome','hangar','heliport','terminal']),'group']='aeroway'		
 		#SUSTENANCE amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (~df['cuisine'].isnull()),'amenity']='restaurant'
+		if 'cuisine' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['cuisine'].isnull()),'amenity']='restaurant'
 		df.loc[df['amenity'].isin(['bar','biergarten','cafe','fast_food','food_court', 'ice_cream','pub','restaurant']),'group']='sustenance'
 		#CRAFT
-		df.loc[(df['amenity'].isnull()) & (~df['craft'].isnull()),'amenity']=df['craft']
+		if 'craft' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['craft'].isnull()),'amenity']=df['craft']
 		df.loc[df['amenity'].isin(['agricultural_engines', 'atelier', 'bakery', 'basket_maker', 'beekeeper', 'blacksmith', 'boatbuilder', 'bookbinder', 'brewery', 'builder', 'cabinet_maker', 'candlemaker', 'car_painter','carpenter','carpet_layer','caterer','chimney_sweeper','cleaning', 'clockmaker','confectionery', 'cooper', 'dental_technician', 'distillery', 'door_construction', 'dressmaker', 'electronics_repair', 'embroiderer', 'electrician', 'engraver', 'fence_maker', 'floorer', 'fruit_press', 'gardener', 'glaziery', 'goldsmith', 'grinding_mill', 'handicraft', 'hvac', 'insulation', 'interior_decorator', 'interior_work', 'jeweller', 'joiner', 'key_cutter', 'locksmith', 'metal_construction', 'mint', 'musical_instrument', 'oil_mill', 'optician', 'organ_builder', 'painter', 'parquet_layer', 'paver','photographer', 'photographic_laboratory', 'piano_tuner', 'plasterer', 'plumber', 'pottery', 'printer', 'printmaker', 'rigger', 'roofer', 'saddler', 'sailmaker', 'sawmill', 'scaffolder', 'sculptor', 'shoemaker', 'signmaker', 'stand_builder', 'stonemason', 'stove_fitter', 'sun_protection','tailor', 'tiler', 'tinsmith', 'toolmaker', 'turner', 'upholsterer', 'watchmaker', 'water_well_drilling', 'window_construction', 'winery']), 'group']='craft'
 		#EDUCATION amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['school', 'college','kindergarten', 'university'])), 'amenity']= df['building']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['school', 'college','kindergarten', 'university'])), 'amenity']= df['building']
 		df.loc[df['amenity'].isin(['college', 'driving_school', 'kindergarten', 'language_school', 'library', 'toy_library', 'training', 'music_school', 'school', 'university']),'group']='education'			
 		#TRANSPORTATION amenities from OSM tagging system
-		df.drop(df[~df['highway'].isnull()].index, inplace=True)
-		df.loc[(df['amenity'].isnull()) & (~df['public_transport'].isnull()),'amenity']='bus_station'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['train_station','transportation'])), 'amenity']='train_station'
+		if 'highway' in df.columns:
+			df.drop(df[~df['highway'].isnull()].index, inplace=True)
+		if 'public_transport' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['public_transport'].isnull()),'amenity']='bus_station'
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['train_station','transportation'])), 'amenity']='train_station'
 		df.loc[df['amenity'].isin(['bicycle_parking', 'bicycle_repair_station', 'bicycle_rental', 'boat_rental', 'boat_sharing', 'bus_station', 'car_rental', 'car_sharing', 'car_wash', 'compressed_air', 'vehicle_inspection', 'charging_station', 'ferry_terminal', 'fuel', 'motorcycle_parking', 'parking', 'parking_entrance', 'taxi','train_station']),'group']='transportation'
 		#ENTERTAINMENT ARTS AND CULTURE amenities from OSM tagging system
 		df.loc[df['amenity'].isin(['arts_centre', 'brothel', 'casino', 'cinema', 'community_centre', 'conference_centre', 'events_venue','exhibition_centre', 'fountain', 'gambling', 'love_hotel','music_venue', 'nightclub', 'planetarium', 'public_bookcase', 'social_centre', 'stripclub', 'studio', 'swingerclub', 'theatre']),'group']='entertainment'		
 		#FACILITIES amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['toilets'])), 'amenity']=df['building']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['toilets'])), 'amenity']=df['building']
 		df.loc[df['amenity'].isin(['bbq', 'bench', 'dog_toilet', 'dressing_room', 'drinking_water', 'give_box', 'mailroom', 'parcel_locker', 'shelter', 'shower', 'telephone', 'toilets', 'water_point', 'watering_place']), 'group']='facilities'		
 		#FINANCIAL amenities from OSM tagging system
 		df.loc[df['amenity'].isin(['atm', 'bank', 'bureau_de_change']),'group']='financial'		
 		#HEALTHCARE amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (~df['healthcare'].isnull()),'amenity']='doctors'
-		df.loc[(df['amenity'].isnull()) & (~df['social_facility'].isnull()), 'amenity']='social_facility'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hospital'])),'amenity']=df['building']
+		if 'healthcare' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['healthcare'].isnull()),'amenity']='doctors'
+		if 'social_facility' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['social_facility'].isnull()), 'amenity']='social_facility'
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hospital'])),'amenity']=df['building']
 		df.loc[df['amenity'].isin(['baby_hatch', 'clinic','dentist','doctors', 'hospital', 'nursing_home', 'pharmacy', 'social_facility', 'veterinary']), 'group']='healthcare'
 		#HISTORIC
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['castle'])), 'amenity']=df['building']
-		df.loc[(df['amenity'].isnull()) & (~df['historic'].isnull()),'amenity']=df['historic']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['castle'])), 'amenity']=df['building']
+		if 'historic' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['historic'].isnull()),'amenity']=df['historic']
 		df.loc[df['amenity'].isin(['aircraft_wreck','archaeological_site', 'battlefield', 'building','bunker',  'creamery', 'farm', 'manor', 'monastery','ruins']), 'group']='historic'		
 		#LEISURE
-		df.loc[(df['amenity'].isnull()) & (~df['leisure'].isnull()), 'group']='leisure'
-		df.loc[(df['amenity'].isnull()) & (~df['leisure'].isnull()),'amenity']=df['leisure']
+		if 'leisure' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['leisure'].isnull()), 'group']='leisure'
+			df.loc[(df['amenity'].isnull()) & (~df['leisure'].isnull()),'amenity']=df['leisure']
 		#OFFICE
-		df.loc[(df['amenity'].isnull()) & (~df['office'].isnull()), 'group']='office'
-		df.loc[(df['amenity'].isnull()) & (~df['office'].isnull()),'amenity']=df['office']
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['office'])),'amenity']='administrative'
+		if 'office' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['office'].isnull()), 'group']='office'
+			df.loc[(df['amenity'].isnull()) & (~df['office'].isnull()),'amenity']=df['office']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['office'])),'amenity']='administrative'
 		df.loc[df['amenity'].isin(['administrative']), 'group']='office'
 		#OTHERS amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['cemetery'])), 'amenity']='grave_yard'
+		if 'landuse' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['cemetery'])), 'amenity']='grave_yard'
 		df.loc[df['amenity'].isin(['animal_boarding', 'animal_breeding', 'animal_shelter', 'baking_oven', 'childcare', 'clock', 'crematorium', 'dive_centre', 'funeral_hall','grave_yard', 'hunting_stand', 'internet_cafe', 'kitchen', 'kneipp_water_cure', 'lounger', 'marketplace', 'monastery', 'photo_booth', 'place_of_mourning', 'public_bath', 'refugee_site', 'vending_machine']), 'group']='others'		
 		#PUBLIC SERVICE amenities from OSM tagging system
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['fire_station','government','public'])), 'amenity']=df['building']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['fire_station','government','public'])), 'amenity']=df['building']
 		df.loc[df['amenity'].isin(['courthouse', 'fire_station', 'government','police', 'post_box', 'post_depot', 'post_office','public', 'prison', 'ranger_station', 'townhall']),'group']='public_service'
 		#RELIGIOUS
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['cathedral','chapel', 'church', 'kingdom_hall', 'monastery','mosque','presbytery','religious','shrine','synagogue','temple'])),'amenity']='place_of_worship'
-		df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['religious'])),'amenity']='place_of_worship'
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['cathedral','chapel', 'church', 'kingdom_hall', 'monastery','mosque','presbytery','religious','shrine','synagogue','temple'])),'amenity']='place_of_worship'
+		if 'landuse' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['religious'])),'amenity']='place_of_worship'
 		df.loc[df['amenity'].isin(['place_of_worship']), 'group']='religious'
 		#SHOP
-		df.loc[(df['amenity'].isnull()) & (~df['shop'].isnull()), 'group']='shop'
-		df.loc[(df['amenity'].isnull()) & (~df['shop'].isnull()),'amenity']=df['shop']
+		if 'shop' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['shop'].isnull()), 'group']='shop'
+			df.loc[(df['amenity'].isnull()) & (~df['shop'].isnull()),'amenity']=df['shop']
 		#SPORT
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['grandstand', 'pavilion', 'riding_hall', 'sports_hall', 'sports_centre', 'stadium'])), 'group']='sport'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['grandstand', 'pavilion', 'riding_hall', 'sports_hall', 'sports_centre', 'stadium'])), 'amenity']=df['building']
-		df.loc[(df['amenity'].isnull()) & (~df['sport'].isnull()), 'group']='sport'
-		df.loc[(df['amenity'].isnull()) & (~df['sport'].isnull()),'amenity']=df['sport']
+		if 'building' in df.columns:		
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['grandstand', 'pavilion', 'riding_hall', 'sports_hall', 'sports_centre', 'stadium'])), 'group']='sport'
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['grandstand', 'pavilion', 'riding_hall', 'sports_hall', 'sports_centre', 'stadium'])), 'amenity']=df['building']
+		if 'sport' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['sport'].isnull()), 'group']='sport'
+			df.loc[(df['amenity'].isnull()) & (~df['sport'].isnull()),'amenity']=df['sport']
 		#TOURISM
-		df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()), 'group']='tourism'
+		if 'building' in df.columns:
 		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'group']='tourism'
 		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['hotel'])),'amenity']=df['building']
+		if 'tourism' in df.columns:
 		df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()),'amenity']=df['tourism']
+		df.loc[(df['amenity'].isnull()) & (~df['tourism'].isnull()), 'group']='tourism'
 		#WASTE MANAGEMENT amenities from OSM tagging system DROP
 		df.loc[df['amenity'].isin(['sanitary_dump_station', 'recycling', 'waste_basket', 'waste_disposal', 'waste_transfer_station']), 'group']='waste_management'		
 		#BUILDING- ACCOMODATION
-		df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['residential'])),'amenity']='house'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['residential'])),'amenity']='house'
-		df.loc[(df['amenity'].isnull()) &(df['building'].isin(['apartments','barracks', 'bungalow', 'cabin','detached', 'dormitory', 'farm', 'ger', 'house','houseboat','semidetached_house', 'shed','static_caravan','stilt_house','terrace','tree_house'])), 'amenity']=df['building']
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['residential'])),'amenity']='house'
+			df.loc[(df['amenity'].isnull()) &(df['building'].isin(['apartments','barracks', 'bungalow', 'cabin','detached', 'dormitory', 'farm', 'ger', 'house','houseboat','semidetached_house', 'shed','static_caravan','stilt_house','terrace','tree_house'])), 'amenity']=df['building']
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['commercial','industrial','kiosk', 'retail', 'supermarket'])),'amenity']=df['building']
 		df.loc[df['amenity'].isin(['apartments','barracks', 'bungalow', 'cabin','detached', 'dormitory', 'farm', 'ger', 'house','houseboat', 'residential','semidetached_house', 'shed','static_caravan','stilt_house','terrace','tree_house']), 'group']='accomodation'
-		#BUILDING-SHOP
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['commercial','industrial','kiosk', 'retail', 'supermarket'])),'amenity']=df['building']
-		df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['commercial','industrial', 'retail'])),'amenity']=df['landuse']
+		if 'landuse' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['residential'])),'amenity']='house'
+			df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['commercial','industrial', 'retail'])),'amenity']=df['landuse']
+		#BUILDING-SHOP		
 		df.loc[df['amenity'].isin(['commercial','industrial','kiosk', 'retail', 'supermarket']), 'group']='shop'
 		#LANDUSE
-		df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['farmland', 'farmyard','forest','grass','greenhouse', 'greenhouse_horticulture' , 'orchard', 'plant_nuersey', 'recreation_ground'])),'amenity']=df['landuse']
+		if 'landuse' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['landuse'].isin(['farmland', 'farmyard','forest','grass','greenhouse', 'greenhouse_horticulture' , 'orchard', 'plant_nuersey', 'recreation_ground'])),'amenity']=df['landuse']
 		df.loc[df['amenity'].isin(['farmland', 'farmyard','forest','grass','greenhouse','greenhouse_horticulture' ,'orchard','plant_nuersey', 'recreation_ground']), 'group']='landuse'
+
 		#BUILDING - HOUSE
-		df.loc[(df['amenity'].isnull()) & (~df['addr:housenumber'].isnull()),'amenity']='house'
-		df.loc[(df['amenity'].isnull()) & (~df['addr:housename'].isnull()),'amenity']='house'
-		df.loc[(df['amenity'].isnull()) & (df['building'].isin(['yes'])), 'amenity']='house'
+		if 'addr:housenumber' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['addr:housenumber'].isnull()),'amenity']='house'
+		if 'addr:housename' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (~df['addr:housename'].isnull()),'amenity']='house'
+		if 'building' in df.columns:
+			df.loc[(df['amenity'].isnull()) & (df['building'].isin(['yes'])), 'amenity']='house'
 		df.loc[df['amenity'].isin(['house']), 'group']='accomodation'	
 		#CLEANING OF UNDEFINED AMENITITES
 		df.drop(df[df['group']==''].index, inplace=True)
