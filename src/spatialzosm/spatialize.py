@@ -95,7 +95,7 @@ class Osmpoi:
 
 		#AERODROME from OSM tagging system
 		if 'aeroway' in df.columns:
-    		df.loc[(df['amenity'].isnull()) & (~df['aeroway'].isnull()), 'amenity'] = df['aeroway']
+        	df.loc[(df['amenity'].isnull()) & (~df['aeroway'].isnull()), 'amenity'] = df['aeroway']
 		df.loc[df['amenity'].isin(['aerodrome','hangar','heliport','terminal']),'group']='aeroway'		
 		#SUSTENANCE amenities from OSM tagging system
 		if 'cuisine' in df.columns:
