@@ -348,7 +348,10 @@ class Osmpoi:
 		for st_type in street_type:
 			gdf['highway'] = gdf['highway'].apply(lambda x: [st_type] if st_type in x and st_type != x[0] else x)
 		gdf['highway'] = gdf['highway'].apply(lambda x: x[0])
-		gdf['highway'] = gdf['highway'].astype('category')
+		#gdf['highway'] = gdf['highway'].astype('category')
+		known_categories = pd.CategoricalDtype(categories=street_type, ordered=False)
+		gdf['highway'] = gdf['highway'].astype(known_categories)	
+		
 		condition = gdf["highway"].isin(street_type)
 		gdf= gdf[condition]
 		gdf['highway'] = gdf['highway'].cat.remove_unused_categories()
