@@ -242,8 +242,9 @@ class Osmpoi:
 			return
 
 		street_gdf = ox.convert.graph_to_gdfs(streets, nodes=False, edges=True, node_geometry=False)
-		# Eliminate unnecessary columns
-		street_gdf.drop(street_gdf.iloc[:, list(range(4, 6)) + list(range(10, street_gdf.columns.size))], inplace=True, axis=1)
+		#Keep only necessary columns
+		columns_to_keep = ['osmid', 'bridge', 'highway', 'name', 'reversed', 'length', 'geometry', 'lanes']
+		street_gdf = street_gdf[columns_to_keep]	
 		# Save file
 		if save_file:
 			# Convert to and save as geopandas
